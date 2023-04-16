@@ -9,6 +9,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
+global catCount
 catCount = 0
 
 
@@ -19,15 +20,20 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    global catCount
+
     if message.author == client.user:
         return
 
-    if 'cat' in message.content:
+    if (('cat' in message.content) or ('kitty' in message.content)) and ('tenor.com' in message.content):
         # await message.channel.send('cat')
         await message.add_reaction("😸")
         catCount += 1
 
-    if 'Count cats' in message.content:
-        await message.channel.send('I have counted ' + catCount + ' cats so far.')
+    if message.content == '!count':
+        response = 'I have counted '
+        response += str(catCount)
+        response += ' cats so far.'
+        await message.channel.send(response)
 
 client.run(os.getenv('TOKEN'))
